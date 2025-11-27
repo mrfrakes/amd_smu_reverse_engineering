@@ -2039,28 +2039,34 @@ rfi_eps: ptr is u4_8_11	[ ptr = $(EPS_BASE) + (4 * u4_8_11); ] { export *[regist
 
 LoopOffset8: loc is u8_16_23 [ loc = inst_start + u8_16_23 + 4; ] { export *:4 loc; }
 
+macro loopSetup(as, end, doit) {
+    LCOUNT = as - 1;
+    LBEG = inst_next;
+    #LEND = end;
+    if (doit) goto <body>;
+    goto end;
+    <body>
+}
+
+
 # LOOP - Loop, pg. 392.
-:loop as, LoopOffset8 is LoopOffset8 & ar = 8 & as & at = 0b0111 & op0 = 6
-	[ loopMode=1; loopEnd = 1; globalset(LoopOffset8, loopEnd); ] {
-	LCOUNT = as - 1;
-	LBEG = inst_next;
-	LEND = &LoopOffset8;
+:loop as, LoopOffset8 is LoopOffset8 & ar=0b1000 & as & at=0b0111 & op0=0b0110
+[loopEnd=1; globalset(LoopOffset8, loopEnd);] {
+    loopSetup(as, LoopOffset8, 1:1);
 }
 
 # LOOPGTZ - Loop if Greater Than Zero, pg. 394.
-:loopgtz as, LoopOffset8 is LoopOffset8 & ar = 0b1010 & as & at = 0b0111 & op0 = 0b0110
-	[ loopMode=1; loopEnd = 1; globalset(LoopOffset8, loopEnd); ] {
-	LCOUNT = as - 1;
-	LBEG = inst_next;
-	LEND = &LoopOffset8;
-	if (as s<= 0) goto LoopOffset8;
+:loopgtz as, LoopOffset8 is LoopOffset8 & ar=0b1010 & as & at=0b0111 & op0=0b0110
+[loopEnd=1; globalset(LoopOffset8, loopEnd);] {
+    loopSetup(as, LoopOffset8, as s> 0);
 }
 
+
+
 # LOOPNEZ - Loop if Not Equal Zero, pg. 396.
-:loopnez as, LoopOffset8 is LoopOffset8 & ar = 0b1001 & as & at = 0b0111 & op0 = 0b0110
-	[ loopMode=1; loopEnd = 1; globalset(LoopOffset8, loopEnd); ] {
-	LCOUNT = as - 1;
-	LBEG = inst_next;
-	LEND = &LoopOffset8;
-	if (as == 0) goto LoopOffset8;
+:loopnez as, LoopOffset8 is LoopOffset8 & ar=0b1001 & as & at=0b0111 & op0=0b0110
+[loopEnd=1; globalset(LoopOffset8, loopEnd);] {
+    loopSetup(as, LoopOffset8, as != 0);
+
 }
+

@@ -139,3 +139,8 @@ void PPSMC_MSG_TestMessage(undefined4 param_1)
 </pre>
   
 It basically returns the parameter + 1 which is intended behaviour (see https://github.com/irusanov/ZenStates-Core/blob/5986e1c380896803d3478ce4eb45b983d60770fa/SMUCommands/SendTestMessage.cs#L4 for example) and returns status ok
+
+
+
+# Acknowledgements:
+- @shuffle2 and @yath for work on https://github.com/yath/ghidra-xtensa/
