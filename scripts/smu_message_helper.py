@@ -61,8 +61,6 @@ table_entry = namedtuple("table_entry", ["table_address", "function_address", "q
 # most importantly this WONT detect empty/unimplemented message handlers!
 def detect_table_entries():
     entries = []
-    
-    print("table entry func addr.  symbol")
 
     for i in range(0, len(firmware), 8):
         if i + 8 > len(firmware):
@@ -80,6 +78,7 @@ def detect_table_entries():
 
 # just print the detected entries
 def print_table_entries(entries):
+    print("table entry func addr.  symbol")
     for entry in entries:
         phi(entry.table_address)
         print(' ',end='')
@@ -126,18 +125,20 @@ def detect_with_queue_table(queue_table):
             gate_bits = get_value(i)
             func_address = get_value(i+4)
 
-            if(check_gate_criteria(gate_bits) and func_address < len(firmware)-4):
-                opcode = get_value(func_address)
-                if(check_entry_criteria(opcode)):
-                    entries.append(table_entry(i, func_address, queue_id, message_id))
-                else:
-                    entries.append(table_entry(i, 0x00, queue_id, message_id)) #this is a reserved entry
+            # quick fix: do not check gate criteria when we already know that the entry is valid from the queue table
+            # this helps with newer smu firmware
+            #if(check_gate_criteria(gate_bits) and func_address < len(firmware)-4):
+            opcode = get_value(func_address)
+            if(check_entry_criteria(opcode)):
+                entries.append(table_entry(i, func_address, queue_id, message_id))
+            else:
+                entries.append(table_entry(i, 0x00, queue_id, message_id)) #this is a reserved entry
 
             message_id = message_id + 1
 
         queue_id = queue_id + 1
 
-    # the take every element in the last queue unti we encount an invalid gate criteria... this is not ideal FIXME
+    # the take every element in the last queue unti we encounter an invalid gate criteria... this is not ideal FIXME
     queue = queue_table[-1]
     message_id = 1
     for i in range(queue + 4, len(firmware), 8):
@@ -147,6 +148,7 @@ def detect_with_queue_table(queue_table):
         gate_bits = get_value(i)
         func_address = get_value(i+4)
 
+        # the quick fix from above wont work in this scenario... this is not ideal FIXME
         if(check_gate_criteria(gate_bits) and func_address < len(firmware)-4):
             opcode = get_value(func_address)
             if(check_entry_criteria(opcode)):
