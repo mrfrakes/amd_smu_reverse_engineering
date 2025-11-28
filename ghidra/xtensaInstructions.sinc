@@ -1390,7 +1390,7 @@ rfi_eps: ptr is u4_8_11	[ ptr = $(EPS_BASE) + (4 * u4_8_11); ] { export *[regist
 	*:4 addr = ft;
 }
 
-# SSIU - Store Single Immediate with Post-Increment, pg. 620.
+# SSIP - Store Single Immediate with Post-Increment, pg. 620.
 :ssip ft, as, u10_16_23_sb2 is u10_16_23_sb2 & ar = 0b1100 & as & ft & op0 = 0b0011 {
 	local addr:4 = as;
 	*:4 addr = ft;
