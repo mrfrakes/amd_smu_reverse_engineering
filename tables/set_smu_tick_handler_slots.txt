@@ -3,12 +3,12 @@ slot 01:	feature_data_calculation_tick_0
 slot 02:	feature_data_calculation_tick_00
 slot 03:	feature_data_calculation_tick_1
 slot 04:	feature_data_calculation_tick_2
-	FUN_00025a38
+			FUN_00025a38
 slot 05:	feature_data_calculation_tick_3
 slot 06:	feature_data_calculation_tick_4
 slot 07:	feature_data_calculation_tick_5
 slot 08:	feature_data_calculation_tick_6
-	FUN_00025dd0
+			FUN_00025dd0
 slot 09:	feature_data_calculation_tick_7
 slot 0A:	feature_data_calculation_tick_8
 slot 0B:	feature_data_calculation_tick_9
@@ -28,8 +28,8 @@ slot 1A:	FUN_0002d0e4
 slot 1B:	FUN_00027788
 slot 1C:	FUN_00026404
 slot 1D:	FUN_00028450
-	FUN_00028708
-	FUN_00028820
+			FUN_00028708
+			FUN_00028820
 slot 1E:	feature_umc_cal_sharing_tick_0_0001746c
 slot 20:	FUN_00028aac
 slot 21:	FUN_00029134
